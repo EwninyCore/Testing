@@ -3,6 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" 
+      content="script-src 'self' 
+               https://cdnjs.cloudflare.com 
+               https://www.gstatic.com 
+               https://*.github.io;
+      connect-src 'self' 
+               https://*.firebaseio.com 
+               https://*.firebaseapp.com 
+               https://*.github.io;
+      img-src 'self' data: 
+               https://*.githubusercontent.com;
+      default-src 'self';">
     <title>Cyber Matrix Chat</title>
     <link rel="stylesheet" href="styles.css">
 </head>
