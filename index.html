@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hologram Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="hologramBg"></div>
+    
+    <div class="cyber-container">
+        <!-- Секция аутентификации -->
+        <div id="authPanel" class="hologram-panel">
+            <div class="hologram-header">ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ</div>
+            <div class="hologram-form">
+                <input type="text" id="hologramAlias" placeholder="ВВЕДИТЕ ПСЕВДОНИМ">
+                <button id="initSystem">АКТИВИРОВАТЬ</button>
+            </div>
+        </div>
+
+        <!-- Основной интерфейс -->
+        <div class="main-grid hidden">
+            <!-- Секция чата -->
+            <div class="chat-hologram">
+                <div class="online-counter">
+                    🟢 ОНЛАЙН: <span id="onlineCount">0</span>
+                </div>
+                <div class="messages-container" id="messageBox"></div>
+                <div class="message-input">
+                    <input type="text" id="messageInput" placeholder="ВВОД ТЕКСТА...">
+                    <button id="sendMessage" class="hologram-btn">▶</button>
+                </div>
+            </div>
+
+            <!-- Голографическая карта пользователя -->
+            <div class="hologram-card">
+                <div class="holo-glitch"></div>
+                <div class="card-content">
+                    <div class="user-id">ID: <span id="permId">#######</span></div>
+                    <div class="user-role" id="userRole">NEUTRAL</div>
+                    <div class="holo-stats">
+                        <div>РЕПУТАЦИЯ: <span class="karma">100</span></div>
+                        <div>СЕССИЯ: <span class="session-time">00:00</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем Firebase через CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

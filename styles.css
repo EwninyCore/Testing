@@ -1,0 +1,189 @@
+:root {
+    --neon-blue: #00f3ff;
+    --hologram-purple: #bd00ff;
+    --cyber-black: #000a15;
+}
+
+body {
+    background: var(--cyber-black);
+    color: var(--neon-blue);
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+}
+
+#hologramBg {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+        45deg,
+        var(--neon-blue),
+        var(--hologram-purple)
+    );
+    opacity: 0.1;
+    z-index: -1;
+    animation: holo-pulse 8s infinite;
+}
+
+@keyframes holo-pulse {
+    0% { opacity: 0.1; }
+    50% { opacity: 0.15; }
+    100% { opacity: 0.1; }
+}
+
+.hologram-panel {
+    background: rgba(0, 15, 30, 0.95);
+    border: 1px solid var(--neon-blue);
+    padding: 2rem;
+    box-shadow: 0 0 50px var(--hologram-purple);
+    position: relative;
+}
+
+.hologram-panel::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        var(--neon-blue),
+        transparent,
+        var(--hologram-purple)
+    );
+    z-index: -1;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+    height: 100vh;
+    padding: 2rem;
+}
+
+.chat-hologram {
+    border: 1px solid var(--neon-blue);
+    background: rgba(0, 0, 20, 0.9);
+    display: flex;
+    flex-direction: column;
+}
+
+.online-counter {
+    padding: 1rem;
+    border-bottom: 1px solid var(--hologram-purple);
+    font-size: 1.2em;
+}
+
+.messages-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.message {
+    background: rgba(0, 30, 60, 0.3);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 3px solid var(--neon-blue);
+    position: relative;
+}
+
+.message::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(0, 255, 255, 0.05),
+        transparent
+    );
+}
+
+.hologram-card {
+    border: 1px solid var(--hologram-purple);
+    background: rgba(0, 0, 30, 0.9);
+    padding: 2rem;
+    position: relative;
+}
+
+.holo-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 255, 255, 0.1) 4px
+    );
+    animation: glitch 0.5s infinite;
+}
+
+@keyframes glitch {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 10px; }
+}
+
+.hologram-btn {
+    background: transparent;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.hologram-btn:hover {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+.message {
+    background: rgba(0, 50, 100, 0.2);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 3px solid #00f3ff;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.message:hover {
+    transform: translateX(10px);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+.message.self {
+    border-left-color: #bd00ff;
+    background: rgba(189, 0, 255, 0.1);
+}
+
+.msg-content {
+    color: #fff;
+    word-break: break-word;
+}
+
+.msg-time {
+    font-size: 0.8em;
+    color: #00f3ff;
+    margin-top: 0.5rem;
+}
+
+#messageInput {
+    background: rgba(0, 15, 30, 0.9);
+    border: 1px solid #00f3ff;
+    color: #fff;
+    padding: 0.8rem;
+    flex-grow: 1;
+}
+
+#sendMessage {
+    padding: 0.8rem 1.5rem;
+}
