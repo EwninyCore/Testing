@@ -1,13 +1,11 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
 import { 
     getDatabase, ref, set, get, push, 
-    onValue, onDisconnect, query, orderByChild, 
-    limitToLast 
+    onValue, onDisconnect, query, orderByChild 
 } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
 import { 
     getAuth, createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, signOut, 
-    onAuthStateChanged 
+    signInWithEmailAndPassword, onAuthStateChanged 
 } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
 const firebaseConfig = {
@@ -21,23 +19,10 @@ const firebaseConfig = {
     measurementId: "G-M8L540PND8"
 };
 
+// Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
-
-export { 
-    db, 
-    auth,
-    ref,
-    set,
-    get,
-    push,
-    onValue,
-    query,
-    orderByChild,
-    limitToLast,
-    onAuthStateChanged 
-};
 
 export class AuthManager {
     constructor() {
@@ -45,65 +30,118 @@ export class AuthManager {
         this.loginForm = document.getElementById('loginForm');
         this.registerForm = document.getElementById('registerForm');
         this.tabs = document.querySelectorAll('.auth-tab');
-        if (this.tabs.length === 0) {
-            console.error('Tabs not found!');
-            return;
-        }
-        this.initEvents();
+        
+        this.init();
     }
 
-    initEvents() {
+    init() {
+        this.initEventListeners();
+        this.checkAuthState();
+    }
+
+    initEventListeners() {
         this.tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
-                e.preventDefault();
                 this.switchForm(e.target.dataset.form);
             });
         });
 
-        this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
-        this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
-    }
 
-    switchForm(formType) {
-        console.log('Switching to:', formType);
-        
-
-        this.tabs.forEach(tab => tab.classList.remove('active'));
-        this.loginForm.classList.remove('active');
-        this.registerForm.classList.remove('active');
-        document.querySelector(`[data-form="${formType}"]`).classList.add('active');
-        document.getElementById(`${formType}Form`).classList.add('active');
+        this.loginForm.addEventListener('submit', (e) => this.handleAuth(e, 'login'));
+        this.registerForm.addEventListener('submit', (e) => this.handleAuth(e, 'register'));
     }
 
     async handleAuth(e, type) {
         e.preventDefault();
-        const login = document.getElementById(type === 'login' ? 'login' : 'regLogin').value;
-        const password = document.getElementById(type === 'login' ? 'password' : 'regPassword').value;
+        
+        const loginField = type === 'login' ? 'login' : 'regLogin';
+        const passwordField = type === 'login' ? 'password' : 'regPassword';
+        
+        const login = document.getElementById(loginField).value;
+        const password = document.getElementById(passwordField).value;
 
         try {
-            if(type === 'register') {
-                const users = await get(ref(db, 'users'));
-                if(Object.values(users.val() || {}).some(u => u.login === login)) {
-                    throw new Error('Логин занят');
+            if (type === 'register') {
+                const snapshot = await get(ref(db, 'users'));
+                const users = Object.values(snapshot.val() || {});
+                if (users.some(user => user.login === login)) {
+                    throw new Error('Логин уже занят');
                 }
-                const res = await createUserWithEmailAndPassword(auth, `${login}@cyberchat.com`, password);
-                await set(ref(db, `users/${res.user.uid}`), {
+
+                const userCredential = await createUserWithEmailAndPassword(
+                    auth, 
+                    `${login}@cyberchat.com`, 
+                    password
+                );
+                
+                await set(ref(db, `users/${userCredential.user.uid}`), {
                     login: login,
                     score: 0,
                     role: 'player',
                     created: Date.now()
                 });
             } else {
-                await signInWithEmailAndPassword(auth, `${login}@cyberchat.com`, password);
+                // Вход
+                await signInWithEmailAndPassword(
+                    auth, 
+                    `${login}@cyberchat.com`, 
+                    password
+                );
             }
+
             this.hideAuthModal();
-        } catch(error) {
-            alert(`Кибер-ошибка: ${error.message}`);
+            this.updateUI();
+
+        } catch (error) {
+            console.error('Ошибка аутентификации:', error);
+            alert(this.getErrorMessage(error.code));
         }
+    }
+
+    getErrorMessage(code) {
+        const errors = {
+            'auth/email-already-in-use': 'Логин уже существует',
+            'auth/wrong-password': 'Неверный пароль',
+            'auth/user-not-found': 'Пользователь не найден',
+            'auth/network-request-failed': 'Ошибка сети'
+        };
+        return errors[code] || 'Неизвестная ошибка';
+    }
+
+    switchForm(formType) {
+        this.tabs.forEach(tab => tab.classList.remove('active'));
+        this.loginForm.classList.remove('active');
+        this.registerForm.classList.remove('active');
+
+        document.querySelector(`[data-form="${formType}"]`).classList.add('active');
+        document.getElementById(`${formType}Form`).classList.add('active');
     }
 
     hideAuthModal() {
         this.modal.style.display = 'none';
+    }
+
+    updateUI() {
         document.querySelector('.container').classList.remove('hidden');
     }
+
+    checkAuthState() {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.hideAuthModal();
+                this.updateUI();
+            }
+        });
+    }
 }
+
+export { 
+    db, 
+    auth,
+    ref,
+    set,
+    get,
+    onValue,
+    query,
+    orderByChild 
+};
