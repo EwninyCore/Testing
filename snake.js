@@ -1,4 +1,12 @@
-import { db, auth } from './auth.js';
+import { 
+    db, 
+    auth, 
+    ref, 
+    push, 
+    query, 
+    onValue, 
+    orderByChild 
+} from './auth.js';
 
 export class SnakeGame {
     constructor() {

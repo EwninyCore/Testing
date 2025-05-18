@@ -1,14 +1,16 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
 import { 
     getDatabase, ref, set, get, push, 
-    onValue, onDisconnect, query, orderByChild, limitToLast 
+    onValue, onDisconnect, query, orderByChild, 
+    limitToLast 
 } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
 import { 
     getAuth, createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, signOut 
+    signInWithEmailAndPassword, signOut, 
+    onAuthStateChanged 
 } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
-export const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyBO3ZFs_PYZ7HubkuGkLu23EzyzpNlD5oc",
     authDomain: "anonchat-200d7.firebaseapp.com",
     databaseURL: "https://anonchat-200d7-default-rtdb.europe-west1.firebasedatabase.app",
@@ -23,7 +25,19 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
 
-export { db, auth };
+export { 
+    db, 
+    auth,
+    ref,
+    set,
+    get,
+    push,
+    onValue,
+    query,
+    orderByChild,
+    limitToLast,
+    onAuthStateChanged 
+};
 
 export class AuthManager {
     constructor() {
