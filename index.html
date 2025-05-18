@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Matrix Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="crt">
+    <!-- Модальное окно аутентификации -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-switcher">
+            <button class="auth-tab active" data-form="login">ВХОД</button>
+            <button class="auth-tab" data-form="register">РЕГИСТРАЦИЯ</button>
+        </div>
+
+        <form id="loginForm" class="auth-form active">
+            <input type="text" id="login" placeholder="Кибер-идентификатор" required>
+            <input type="password" id="password" placeholder="Шифр-пароль" required>
+            <button type="submit" class="glow-btn">ДОСТУП РАЗРЕШЁН</button>
+        </form>
+
+        <form id="registerForm" class="auth-form">
+            <input type="text" id="regLogin" placeholder="Новый кибер-ID" required>
+            <input type="password" id="regPassword" placeholder="Генерация шифра" required>
+            <button type="submit" class="glow-btn">СОЗДАТЬ АККАУНТ</button>
+        </form>
+    </div>
+
+    <!-- Основной интерфейс -->
+    <div class="container hidden">
+        <div class="chat-section">
+            <div class="online-counter">
+                🟢 ONLINE: <span id="onlineCount">0</span>
+            </div>
+            <div class="chat-container"></div>
+            <form id="chatForm" class="chat-form">
+                <input type="text" class="chat-input" placeholder="Введите кибер-сообщение...">
+                <button type="submit">➤</button>
+            </form>
+        </div>
+
+        <div class="game-section">
+            <button id="snakeStartBtn" class="snake-btn">🕹️ АКТИВИРОВАТЬ ЗМЕЙКУ</button>
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            <div class="leaderboard">
+                <h3>🏆 ТОП-10 ХАКЕРОВ:</h3>
+                <div id="leaderboardList"></div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="chat.js"></script>
+    <script type="module" src="snake.js"></script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>

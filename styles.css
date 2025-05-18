@@ -1,0 +1,317 @@
+:root {
+    --hologram-1: #00f7ff;
+    --hologram-2: #ff00ff;
+    --hologram-3: #4d00ff;
+    --depth-color: rgba(0, 15, 25, 0.9);
+    --neon-glow: 0 0 15px var(--hologram-1),
+                 0 0 25px var(--hologram-2),
+                 0 0 35px var(--hologram-3);
+    --hologram-gradient: linear-gradient(
+        135deg,
+        var(--hologram-1) 0%,
+        var(--hologram-2) 50%,
+        var(--hologram-3) 100%
+    );
+}
+
+/* CRT эффект */
+body.crt {
+    position: relative;
+    background: #000;
+}
+
+body.crt::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 255, 255, 0.02) 0%,
+        rgba(0, 0, 0, 0.9) 70%
+    );
+    animation: hologram-pulse 8s infinite alternate;
+}
+
+/* Контейнеры */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+}
+
+/* Секция чата */
+.chat-section {
+    background: rgba(0, 20, 0, 0.8);
+    border: 1px solid var(--hologram-1);
+    padding: 15px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--neon-glow);
+    min-height: 70vh;
+    max-height: 90vh;
+}
+
+.chat-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--hologram-1) transparent;
+}
+
+/* Сообщения */
+.message {
+    background: rgba(0, 30, 0, 0.9);
+    padding: 12px;
+    margin: 10px 0;
+    border-left: 3px solid var(--hologram-1);
+    transition: all 0.3s ease;
+    position: relative;
+    backdrop-filter: blur(2px);
+}
+
+.message:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(-2deg);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.message.self {
+    border-left-color: var(--hologram-2);
+    background: linear-gradient(
+        to left,
+        rgba(60, 0, 30, 0.4) 0%,
+        rgba(30, 0, 60, 0.4) 100%
+    );
+}
+
+.message.system-message {
+    border-left-color: #ff5555;
+    background: rgba(255, 85, 85, 0.1);
+}
+
+.message.system-message .msg-content {
+    color: #ff5555;
+    text-shadow: 0 0 5px #ff5555;
+    padding: 8px;
+}
+
+/* Элементы управления */
+.chat-form {
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.chat-input {
+    flex-grow: 1;
+    background: rgba(0, 20, 0, 0.8);
+    border: 1px solid var(--hologram-1);
+    color: var(--hologram-1);
+    padding: 10px;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+}
+
+.chat-input:focus {
+    outline: none;
+    box-shadow: 0 0 15px var(--hologram-1);
+}
+
+/* Игровая секция */
+.game-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+#gameCanvas {
+    border: 2px solid var(--hologram-1);
+    background: #000;
+    image-rendering: pixelated;
+}
+
+
+.snake-btn {
+    background: transparent;
+    color: var(--hologram-1);
+    border: 2px solid var(--hologram-1);
+    padding: 12px 24px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.snake-btn:hover {
+    background: var(--hologram-1);
+    color: #000;
+    box-shadow: var(--neon-glow);
+}
+
+/* Анимации */
+@keyframes hologram-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes hologram-pulse {
+    0% { opacity: 0.3; transform: scale(0.98); }
+    100% { opacity: 0.6; transform: scale(1.02); }
+}
+
+@keyframes scanline {
+    from { background-position: 0 0; }
+    to { background-position: 0 100%; }
+}
+
+/* Оптимизации */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--hologram-1);
+    border-radius: 3px;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--depth-color);
+    padding: 2rem;
+    border: 2px solid var(--hologram-1);
+    box-shadow: var(--neon-glow);
+}
+.auth-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 20, 0, 0.95);
+    border: 2px solid #0f0;
+    padding: 2rem;
+    width: 400px;
+    z-index: 1000;
+    box-shadow: 0 0 30px #0f03;
+}
+
+.auth-switcher {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #0f0;
+}
+
+.auth-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #0f0;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.auth-tab.active {
+    background: #0f02;
+    text-shadow: 0 0 10px #0f0;
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auth-form input {
+    background: #000;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 0.8rem;
+    font-family: 'Courier New', monospace;
+}
+
+.glow-btn {
+    background: #0f0;
+    color: #000;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 1rem;
+}
+
+.glow-btn:hover {
+    box-shadow: 0 0 15px #0f0;
+}
+
+.hidden {
+    display: none;
+}
+
+.user-role {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
+.leaderboard {
+    background: rgba(0, 20, 0, 0.9);
+    border: 1px solid #0f0;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.leader-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px dashed #0f0;
+}
+
+.podium-1 { color: #ff0; }
+.podium-2 { color: #0f0; }
+.podium-3 { color: #0af; }
+
+.rank { width: 30%; }
+.name { width: 50%; }
+.score { width: 20%; text-align: right; }
+
+.role-player { color: #0f0; border: 1px solid #0f0; }
+.role-vip { color: #ff0; border: 1px solid #ff0; }
+.role-admin { color: #f00; border: 1px solid #f00; }
