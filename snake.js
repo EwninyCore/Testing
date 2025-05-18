@@ -37,7 +37,7 @@ export class SnakeGame {
     }
 
     async initLeaderboard() {
-        onValue(query(ref(db, 'leaderboard'), (snapshot) => {
+        onValue(query(ref(db, 'leaderboard')), (snapshot) => {
             const scores = Object.values(snapshot.val() || {});
             this.renderLeaderboard(scores.sort((a,b) => b.score - a.score).slice(0,10));
         });
@@ -102,7 +102,6 @@ export class SnakeGame {
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Змейка
         this.snake.forEach((seg, i) => {
             this.ctx.fillStyle = i === 0 ? '#0f0' : '#0a0';
             this.ctx.fillRect(
@@ -113,7 +112,6 @@ export class SnakeGame {
             );
         });
 
-        // Еда
         this.ctx.fillStyle = '#f00';
         this.ctx.fillRect(
             this.food.x * this.gridSize,

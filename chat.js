@@ -23,7 +23,7 @@ export class CyberChat {
     }
 
     initMessages() {
-        onValue(query(ref(db, 'messages'), (snapshot) => {
+        onValue(query(ref(db, 'messages')), (snapshot) => {
             this.messages = Object.values(snapshot.val() || {});
             this.renderMessages();
         });

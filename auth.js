@@ -31,26 +31,33 @@ export class AuthManager {
         this.loginForm = document.getElementById('loginForm');
         this.registerForm = document.getElementById('registerForm');
         this.tabs = document.querySelectorAll('.auth-tab');
-        this.init();
+        if (this.tabs.length === 0) {
+            console.error('Tabs not found!');
+            return;
+        }
+        this.initEvents();
     }
 
-    init() {
-        this.tabs.forEach(tab => 
-            tab.addEventListener('click', (e) => this.switchForm(e))
-        );
+    initEvents() {
+        this.tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.switchForm(e.target.dataset.form);
+            });
+        });
+
+        this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+        this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
+    }
+
+    switchForm(formType) {
+        console.log('Switching to:', formType);
         
-        this.loginForm.addEventListener('submit', (e) => this.handleAuth(e, 'login'));
-        this.registerForm.addEventListener('submit', (e) => this.handleAuth(e, 'register'));
-    }
 
-    switchForm(e) {
-        const formType = e.target.dataset.form;
         this.tabs.forEach(tab => tab.classList.remove('active'));
-        e.target.classList.add('active');
-        
-        [this.loginForm, this.registerForm].forEach(form => 
-            form.classList.remove('active')
-        );
+        this.loginForm.classList.remove('active');
+        this.registerForm.classList.remove('active');
+        document.querySelector(`[data-form="${formType}"]`).classList.add('active');
         document.getElementById(`${formType}Form`).classList.add('active');
     }
 
