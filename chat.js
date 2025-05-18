@@ -2,9 +2,9 @@ import {
     db, 
     auth, 
     ref, 
-    push, 
-    query, 
+    push,
     onValue,
+    query,
     onAuthStateChanged 
 } from './auth.js';
 
@@ -15,12 +15,12 @@ export class CyberChat {
         this.init();
     }
 
-    async init() {
+    init() {
         onAuthStateChanged(auth, (user) => {
             this.user = user;
             this.initMessages();
         });
-        
+
         document.getElementById('chatForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.querySelector('.chat-input');
@@ -39,15 +39,16 @@ export class CyberChat {
 
     async sendMessage(content) {
         try {
+            // Санитизация контента
+            const sanitizedContent = this.sanitize(content);
+            
             await push(ref(db, 'messages'), {
                 userId: this.user.uid,
-                login: this.user.login,
-                content: this.sanitize(content),
-                timestamp: Date.now(),
-                color: '#0f0'
+                content: sanitizedContent, // Используем очищенный контент
+                timestamp: Date.now()
             });
         } catch(error) {
-            console.error('Ошибка передачи:', error);
+            console.error("Ошибка отправки:", error);
         }
     }
 
@@ -55,20 +56,19 @@ export class CyberChat {
         return input
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/\//g, '&#x2F;');
     }
+
 
     renderMessages() {
         const container = document.querySelector('.chat-container');
         container.innerHTML = this.messages.map(msg => `
-            <div class="message ${msg.userId === this.user?.uid ? 'self' : ''}">
-                <div class="msg-header">
-                    <span style="color: ${msg.color}">${msg.login}</span>
-                    <span class="time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
-                </div>
-                <div class="msg-content">${msg.content}</div>
+            <div class="message">
+                <div class="msg-content">${msg.content}</div> <!-- Уже санитизировано -->
             </div>
         `).join('');
-        container.scrollTop = container.scrollHeight;
     }
 }

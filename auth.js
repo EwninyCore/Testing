@@ -13,16 +13,29 @@ const firebaseConfig = {
     authDomain: "anonchat-200d7.firebaseapp.com",
     databaseURL: "https://anonchat-200d7-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "anonchat-200d7",
-    storageBucket: "anonchat-200d7.firebasestorage.app",
+    storageBucket: "anonchat-200d7.appspot.com",
     messagingSenderId: "556527619851",
     appId: "1:556527619851:web:7e03d8882f789588719c0e",
     measurementId: "G-M8L540PND8"
 };
 
-// Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
+
+// Явный экспорт всех необходимых функций
+export { 
+    db,
+    auth,
+    ref,
+    set,
+    get,
+    push,
+    onValue,
+    query,
+    orderByChild,
+    onAuthStateChanged 
+};
 
 export class AuthManager {
     constructor() {
@@ -134,14 +147,3 @@ export class AuthManager {
         });
     }
 }
-
-export { 
-    db, 
-    auth,
-    ref,
-    set,
-    get,
-    onValue,
-    query,
-    orderByChild 
-};
